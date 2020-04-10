@@ -1,5 +1,5 @@
-module.exports = {
-    googleProjectID: 'quetzi',
-    dialogFlowSessionID: 'quetzi-session',
-    dialogFlowSessionLanguageCode: 'es'
-}
+if (process.env.NODE_ENV === 'production') {
+    module.exports = require('./prod');
+} else {
+    module.exports = require('./dev');
+} 
