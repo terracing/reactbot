@@ -8,7 +8,8 @@
     "npm": "6.14.4"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "backend": "nodemon index.js"
   },
   "keywords": [
     "reactjs",
@@ -18,6 +19,8 @@
   "author": "Omar Terrazas",
   "license": "GPL-3.0",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "dialogflow": "^1.2.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
