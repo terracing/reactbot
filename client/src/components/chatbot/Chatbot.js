@@ -1,59 +1,73 @@
 import React, { Component } from 'react';
-import axios from 'axios/index';
+import axios from "axios/index";
+import Message from './Message';
 
 class Chatbot extends Component {
+
     constructor(props) {
         super(props);
+
         this.state = {
             messages: []
         };
     }
 
-    async df_text_query(message) {
+    async df_text_query (queryText) {
         let says = {
-            speaks: 'me',
+            speaks: 'user',
             msg: {
-                text: {
-                    text: message
+                text : {
+                    text: queryText
                 }
             }
-        };
+        }
+        this.setState({ messages: [...this.state.messages, says]});
+        const res = await axios.post('/api/df_text_query',  {message: queryText});
 
-        this.setState({messages: [...this.state.messages, says]});
-        const res = await axios.post('/api/df_text_query', {message});
-
-        for (let msg of res.data.fullfilmentMessages) {
+        for (let msg of res.data.fulfillmentMessages) {
             says = {
                 speaks: 'bot',
                 msg: msg
             }
-            this.setState({messages: [...this.state.messages, says]});
+            this.setState({ messages: [...this.state.messages, says]});
         }
-    }
+    };
 
-    async df_event_query(event) {
-        const res = await axios.post('/api/df_event_query', {event});
 
-        for (let msg of res.data.fullfilmentMessages) {
-            says = {
-                speaks: 'me',
+    async df_event_query(eventName) {
+
+        const res = await axios.post('/api/df_event_query',  {event: eventName});
+
+        for (let msg of res.data.fulfillmentMessages) {
+            let says = {
+                speaks: 'bot',
                 msg: msg
             }
-            this.setState({messages: [...this.state.messages, says]});
+
+            this.setState({ messages: [...this.state.messages, says]});
+        }
+    };
+
+    renderMessages(stateMessages) {
+        if(stateMessages) {
+            return stateMessages.map((message, i) => {
+                return <Message key={ i } speaks={ message.speaks } text={ message.msg.text.text } />;
+            });
+        } else {
+            return null;
         }
     }
 
-    render () {
+    render() {
         return (
-            <div style={{ height:400, width: 400, float: 'right' }}>
-                <div id="chatbot" style={{ height: '100%', width: '100%', overflow: 'auto' }}>
+            <div style={{height: 400, width: 400, float: 'right'}}>
+                <div id="chatbot" style={{height: '100%', width: '100%', overflow: 'auto'}}>
                     <h2>Chatbot</h2>
-                    <div className="input-field">
-                        <input type="text" placeholder="Message" />
-                    </div>
+                    { this.renderMessages(this.state.messages) }
+                    <input type="text"/>
                 </div>
             </div>
-        )
+        );
     }
 }
 
