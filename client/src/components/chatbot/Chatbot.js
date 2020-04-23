@@ -4,6 +4,7 @@ import Message from './Message';
 
 class Chatbot extends Component {
     messagesEnd;
+    talkInput;
 
     constructor(props) {
         super(props);
@@ -56,6 +57,7 @@ class Chatbot extends Component {
 
     componentDidUpdate() {
         this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+        this.talkInput.focus();
     }
 
     renderMessages(stateMessages) {
@@ -82,7 +84,7 @@ class Chatbot extends Component {
                     <h2>Chatbot</h2>
                     { this.renderMessages(this.state.messages) }
                     <div ref={ (el) => { this.messagesEnd = el; }} style={{ float: 'left', clear: 'both'}}></div>
-                    <input type="text" onKeyPress={this._handleInputKeyPress}  />
+                    <input type="text" ref={(input) => { this.talkInput = input; }} onKeyPress={this._handleInputKeyPress}  />
                 </div>
             </div>
         );
